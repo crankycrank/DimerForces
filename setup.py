@@ -9,6 +9,7 @@ setup (name = 'wordcount',
     version = '0.1',
     description = 'Word counting/bias computing extension',
     author = 'Alexander Solovyov, Petr Sulc, Benjamin Greenbaum',
-    scripts = ['compute_sliding_window_force.py', 'compute_force_from_regions.py'],
+    scripts = ['compute_sliding_window_force.py',
+        'compute_force_from_regions.py', 'compute_force_for_fasta.py'],
     py_modules = ['wordcount'],
     ext_modules = [ext1])
