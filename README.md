@@ -1,6 +1,7 @@
 # RNA motif forces/word frequencies
 
 Dimer "forces" are defined in the following paper:
+
 Greenbaum BD, Cocco S, Levine AJ, Monasson R. Quantitative theory of entropic forces acting on constrained nucleotide sequences applied to viruses. Proc Natl Acad Sci USA. 2014 Apr 1;111(13):5054-9.
 
 ## Installation
@@ -24,14 +25,14 @@ python3 setup.py build && python3 setup.py install
 ```
 
 ## Usage:
-* `CpG` force calculation in scanning window:
+* Dimer force calculation in scanning window:
 ```
 compute_sliding_window_force.py [-h] [-L WINDOW] [-c CONTIG] [-d DIMER] [-e END] [-s START] fasta_infile
 ```
 Arguments `CONTIG` to use, `START`, `END` and `WINDOW` length are optional. `DIMER` defaults to `CG`.
 Output: contig_id, start, #(valid dimers), dimer force.
 
-* `CpG` force calculation for given coordinates:
+* Dimer force calculation for a subsequence with given coordinates:
 ```
 compute_force_from_regions.py [-h] [-d DIMER] [-L MIN_LENGTH] [-s] fasta_infile coordinate_file
 ```
