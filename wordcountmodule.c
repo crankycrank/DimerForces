@@ -1,9 +1,8 @@
 #define PY_SSIZE_T_CLEAN
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
-#include "numpy/ndarraytypes.h"
-#include "numpy/ufuncobject.h"
-#include "numpy/npy_3kcompat.h"
-/* #include <numpy/arrayobject.h> */
+// Relevant documentation for what to #include https://numpy.org/doc/2.1/reference/c-api/array.html#including-and-importing-the-c-api
+#include "numpy/ndarrayobject.h"
 
 
 /* enumerate the 4 nucleotides */
@@ -248,9 +247,9 @@ static PyObject* count_words(PyObject* self, PyObject* args)
 
 	// build the array
 	npy_intp dims[] = {N};
-	PyArrayObject *rslt =  (PyArrayObject *) PyArray_SimpleNew(1, dims, NPY_DOUBLE);
-	npy_double * fv = (npy_double*) rslt->data;
-	memset(fv, 0, N * sizeof(npy_double));
+	PyArrayObject *rslt =  (PyArrayObject *) PyArray_ZEROS(1, dims,
+        NPY_DOUBLE, 0);
+	npy_double * fv = (npy_double*) PyArray_DATA(rslt);
 
 	// fill the vector
 	Py_ssize_t i, j;
@@ -293,10 +292,9 @@ static PyObject* count_overlapping_words(PyObject* self, PyObject* args)
 	
 	// build the array
 	npy_intp dims[] = {N};
-	PyArrayObject *rslt =  (PyArrayObject *) PyArray_SimpleNew(1, dims, 
-	NPY_DOUBLE);
-	npy_double * fv = (npy_double*) rslt->data;
-	memset(fv, 0, N * sizeof(npy_double));
+	PyArrayObject *rslt =  (PyArrayObject *) PyArray_ZEROS(1, dims,
+        NPY_DOUBLE, 0);
+    npy_double * fv = (npy_double*) PyArray_DATA(rslt);
 
     // implement counting
 	Py_ssize_t pos = 0;
@@ -373,10 +371,9 @@ PyObject* args)
 
 	// build the array
 	npy_intp dims[] = {M, N};
-	PyArrayObject *rslt =  (PyArrayObject *) PyArray_SimpleNew(2, dims, 
-	NPY_DOUBLE);
-	npy_double * fv = (npy_double*) rslt->data;
-	memset(fv, 0, M * N * sizeof(npy_double));
+	PyArrayObject *rslt =  (PyArrayObject *) PyArray_ZEROS(2, dims,
+        NPY_DOUBLE, 0);
+	//npy_double * fv = (npy_double*) PyArray_DATA(rslt);
 	if (!PyArray_ISCARRAY(rslt)) {
 		// check that it is C-contiguous, writeable and has a native byte order
 		return NULL;
@@ -486,7 +483,7 @@ static PyMethodDef WordCountMethods[] =
 		"Count n-mers in a string.\n" 
 		"Arguments: sequence, n-mer size, alphabet type"},
 	{"count_sliding_overlapping_words", count_sliding_overlapping_words,
-		METH_VARARGS, "Count n-mers in a liding window over a string.\n" 
+		METH_VARARGS, "Count n-mers in a sliding window over a string.\n"
 		"Arguments: sequence, n-mer size, window length, step, alphabet type"},
 	{"alphabet_size", alphabet_size_ext,
 		METH_VARARGS, "Size of the alphabet.\n" 
@@ -508,6 +505,14 @@ static struct PyModuleDef wordcountmodule_definition = {
 
 PyMODINIT_FUNC PyInit__wordcount(void) {
     Py_Initialize();
+    /* numpy-specific initializations, see
+    https://numpy.org/devdocs//reference/c-api/array.html#including-and-importing-the-c-api
+    and 
+    https://numpy.org/devdocs//reference/c-api/array.html#mechanism-details-and-dynamic-linking
+    */
+    if (PyArray_ImportNumPyAPI() < 0) {
+        return NULL;
+    }
     import_array();
     return PyModule_Create(&wordcountmodule_definition);
 }
