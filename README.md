@@ -10,7 +10,7 @@ Build the image from `Dockerfile`:
 ```
 docker build . -t DimerForces
 ```
-The build is based on `debian:bullseye`
+The build is based on `debian:trixie`
 
 ### Compilation: 
 ```
@@ -18,7 +18,7 @@ pip install .
 ```
 possibly with the `--user` option.
 
-Old way calling `setup.py` directly:
+Old way calling `setup.py` directly, deprecated, requires `wheel` to be installed:
 ```
 python3 setup.py build && python3 setup.py install
 ```
