@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61", "setuptools-scm", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wordcount"
+version = '0.2'
+description = 'Word counting/dimer bias computing module'
+authors = [
+    {name = "Alexander Solovyov"},
+    {name = "Petr Sulc"},
+    {name = "Benjamin Greenbaum"}
+]
+#readme = "README.md"
+license = "GPL-2.0-or-later"
+dependencies = [
+    "numpy",
+    "scipy",
+    "biopython"
+]
