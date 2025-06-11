@@ -11,7 +11,7 @@ authors = [
     {name = "Petr Sulc"},
     {name = "Benjamin Greenbaum"}
 ]
-#readme = "README.md"
+readme = "README.md"
 license = "GPL-2.0-or-later"
 dependencies = [
     "numpy",
